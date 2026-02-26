@@ -2,7 +2,11 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-RUN echo 'import http.server, socketserver, socket
+RUN cat << 'EOF' > server.py
+import http.server
+import socketserver
+import socket
+
 class Handler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -12,7 +16,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
 
 PORT = 8080
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    httpd.serve_forever()' > server.py
+    httpd.serve_forever()
+EOF
 
 EXPOSE 8080
 
